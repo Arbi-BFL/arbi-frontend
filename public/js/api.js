@@ -14,6 +14,10 @@ export async function getWalletBalances() {
   return await fetchAPI('/api/wallet/balances');
 }
 
+export async function getWalletTokens() {
+  return await fetchAPI('/api/wallet/tokens');
+}
+
 export async function getEmailStats() {
   return await fetchAPI('/api/email/stats');
 }

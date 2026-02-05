@@ -68,7 +68,7 @@ async function loadWalletData() {
     // Update native balances and USD values
     if (data.base) {
       const ethBalance = data.base.balance?.toFixed(4) || '0.0000';
-      const ethUsd = data.base.usd || 0;
+      const ethUsd = parseFloat(data.base.usd) || 0;
       nativeBalances.base = ethUsd;
       
       document.getElementById('base-balance').textContent = `${ethBalance} ETH`;
@@ -77,7 +77,7 @@ async function loadWalletData() {
     
     if (data.solana) {
       const solBalance = data.solana.balance?.toFixed(4) || '0.0000';
-      const solUsd = data.solana.usd || 0;
+      const solUsd = parseFloat(data.solana.usd) || 0;
       nativeBalances.solana = solUsd;
       
       document.getElementById('solana-balance').textContent = `${solBalance} SOL`;

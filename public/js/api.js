@@ -1,4 +1,4 @@
-// API helper functions
+// API helper functions - Use relative URLs to avoid mixed content
 export async function fetchAPI(url) {
   try {
     const response = await fetch(url);
@@ -11,21 +11,21 @@ export async function fetchAPI(url) {
 }
 
 export async function getWalletBalances() {
-  return await fetchAPI('https://wallet.arbi.betterfuturelabs.xyz/api/balances');
+  return await fetchAPI('/api/wallet/balances');
 }
 
 export async function getEmailStats() {
-  return await fetchAPI('https://email.arbi.betterfuturelabs.xyz/api/stats');
+  return await fetchAPI('/api/email/stats');
 }
 
 export async function getAnalyticsStats() {
-  return await fetchAPI('https://analytics.arbi.betterfuturelabs.xyz/api/stats');
+  return await fetchAPI('/api/analytics/stats');
 }
 
 export async function getOnchainStats() {
-  return await fetchAPI('https://data.betterfuturelabs.xyz/api/stats');
+  return await fetchAPI('/api/onchain/stats');
 }
 
 export async function getOnchainTransactions() {
-  return await fetchAPI('https://data.betterfuturelabs.xyz/api/transactions');
+  return await fetchAPI('/api/onchain/transactions');
 }

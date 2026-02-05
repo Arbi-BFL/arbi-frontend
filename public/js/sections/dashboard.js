@@ -5,28 +5,44 @@ export async function renderDashboard() {
   
   content.innerHTML = `
     <div class="section">
-      <h1 class="section-title">Dashboard</h1>
+      <h1 class="section-title">🤖 Dashboard</h1>
       
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-        <div class="card" style="background: var(--nb-yellow);">
-          <h3 style="margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">💰 Wallet</h3>
-          <div id="wallet-widget">Loading...</div>
+      <div class="grid grid-4" style="margin-bottom: 2rem;">
+        <div class="stat-card card-yellow">
+          <div class="stat-label">💰 Wallet Status</div>
+          <div class="stat-value" id="wallet-widget">...</div>
+          <div class="stat-label">Total Balance</div>
         </div>
         
-        <div class="card" style="background: var(--nb-pink); color: white;">
-          <h3 style="margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">📧 Email</h3>
-          <div id="email-widget">Loading...</div>
+        <div class="stat-card card-coral">
+          <div class="stat-label">📧 Email System</div>
+          <div class="stat-value" id="email-widget">...</div>
+          <div class="stat-label">Monitoring Status</div>
         </div>
         
-        <div class="card" style="background: var(--nb-blue);">
-          <h3 style="margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">🔗 Onchain</h3>
-          <div id="onchain-widget">Loading...</div>
+        <div class="stat-card card-cyan">
+          <div class="stat-label">🔗 Onchain Activity</div>
+          <div class="stat-value" id="onchain-widget">...</div>
+          <div class="stat-label">Total Transactions</div>
+        </div>
+        
+        <div class="stat-card card-purple">
+          <div class="stat-label">📊 Analytics</div>
+          <div class="stat-value" id="analytics-widget">...</div>
+          <div class="stat-label">Data Points</div>
         </div>
       </div>
       
       <div class="card">
-        <h2 style="margin-bottom: 1rem;">Quick Stats</h2>
-        <div id="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;"></div>
+        <h2 style="margin-bottom: 1rem; font-size: 1.5rem;">System Overview</h2>
+        <div class="grid grid-2" id="overview-grid">
+          <div style="padding: 1rem; background: var(--nb-gray-light); border: var(--border-thin);">
+            <strong>Backend Services:</strong> 4 running
+          </div>
+          <div style="padding: 1rem; background: var(--nb-gray-light); border: var(--border-thin);">
+            <strong>Unified Frontend:</strong> Active
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -38,33 +54,37 @@ async function loadDashboardWidgets() {
   // Wallet widget
   try {
     const wallet = await getWalletBalances();
-    document.getElementById('wallet-widget').innerHTML = `
-      <div style="font-size: 1.5rem; font-weight: 700;">⛓️ ${wallet.base?.balance?.toFixed(4) || '0.0000'} ETH</div>
-      <div style="font-size: 1.5rem; font-weight: 700; margin-top: 0.5rem;">☀️ ${wallet.solana?.balance?.toFixed(4) || '0.0000'} SOL</div>
-    `;
+    if (wallet.error) throw new Error(wallet.error);
+    const total = (wallet.base?.usd || 0) + (wallet.solana?.usd || 0);
+    document.getElementById('wallet-widget').textContent = `$${total.toFixed(2)}`;
   } catch (e) {
-    document.getElementById('wallet-widget').innerHTML = '<div style="opacity: 0.7;">Error loading</div>';
+    document.getElementById('wallet-widget').innerHTML = '<span style="font-size: 1rem;">Error</span>';
   }
   
   // Email widget
   try {
     const email = await getEmailStats();
-    document.getElementById('email-widget').innerHTML = `
-      <div style="font-size: 1.25rem; font-weight: 700;">${email.monitoring_status || 'Unknown'}</div>
-      <div style="opacity: 0.9; margin-top: 0.5rem;">Last check: ${email.last_check_time || 'Never'}</div>
-    `;
+    if (email.error) throw new Error(email.error);
+    document.getElementById('email-widget').textContent = email.status || 'Unknown';
   } catch (e) {
-    document.getElementById('email-widget').innerHTML = '<div style="opacity: 0.7;">Error loading</div>';
+    document.getElementById('email-widget').innerHTML = '<span style="font-size: 1rem;">Error</span>';
   }
   
   // Onchain widget
   try {
     const onchain = await getOnchainStats();
-    document.getElementById('onchain-widget').innerHTML = `
-      <div style="font-size: 1.5rem; font-weight: 700;">${onchain.total_transactions || 0} TXs</div>
-      <div style="opacity: 0.9; margin-top: 0.5rem;">Base: ${onchain.base_transactions || 0} | Sol: ${onchain.solana_transactions || 0}</div>
-    `;
+    if (onchain.error) throw new Error(onchain.error);
+    document.getElementById('onchain-widget').textContent = onchain.total_transactions || '0';
   } catch (e) {
-    document.getElementById('onchain-widget').innerHTML = '<div style="opacity: 0.7;">Error loading</div>';
+    document.getElementById('onchain-widget').innerHTML = '<span style="font-size: 1rem;">Error</span>';
+  }
+  
+  // Analytics widget
+  try {
+    const analytics = await getAnalyticsStats();
+    if (analytics.error) throw new Error(analytics.error);
+    document.getElementById('analytics-widget').textContent = analytics.total_points || '0';
+  } catch (e) {
+    document.getElementById('analytics-widget').innerHTML = '<span style="font-size: 1rem;">Error</span>';
   }
 }

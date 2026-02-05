@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    container_name: arbi-unified-frontend
+    ports:
+      - "3500:80"
+    restart: unless-stopped
+    networks:
+      - arbi-network
+
+networks:
+  arbi-network:
+    external: true

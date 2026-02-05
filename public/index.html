@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbi Dashboard | Better Future Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/neobrutalist.css">
+  <link rel="stylesheet" href="/css/layout.css">
+</head>
+<body>
+  <!-- Mobile Header -->
+  <div class="mobile-header" style="display: none;">
+    <div class="brand">
+      <span class="brand-emoji">🤖</span>
+      <span class="brand-text">Arbi</span>
+    </div>
+    <button class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="/" class="brand">
+          <span class="brand-emoji">🤖</span>
+          <div>
+            <div class="brand-text">Arbi</div>
+            <div style="font-size: 0.75rem; color: var(--nb-yellow); margin-top: 0.25rem;">BETTER FUTURE LABS</div>
+          </div>
+        </a>
+      </div>
+      
+      <nav class="nav" id="nav">
+        <a href="/" class="nav-link" data-route="">
+          <span class="nav-icon">🏠</span>
+          Dashboard
+        </a>
+        <a href="/wallet" class="nav-link" data-route="wallet">
+          <span class="nav-icon">💰</span>
+          Wallet
+        </a>
+        <a href="/email" class="nav-link" data-route="email">
+          <span class="nav-icon">📧</span>
+          Email
+        </a>
+        <a href="/analytics" class="nav-link" data-route="analytics">
+          <span class="nav-icon">📊</span>
+          Analytics
+        </a>
+        <a href="/onchain" class="nav-link" data-route="onchain">
+          <span class="nav-icon">🔗</span>
+          Onchain
+        </a>
+        <a href="https://docs.arbi.betterfuturelabs.xyz" class="nav-link" target="_blank">
+          <span class="nav-icon">📚</span>
+          Docs
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div id="app-content"></div>
+    </main>
+  </div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

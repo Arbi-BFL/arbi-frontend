@@ -46,7 +46,9 @@ async function loadOnchainData() {
     
     // Load transactions
     const txs = await getOnchainTransactions();
-    if (txs && txs.transactions && txs.transactions.length > 0) {
+    if (txs && Array.isArray(txs) && txs.length > 0) {
+      renderTransactions(txs.slice(0, 10));
+    } else if (txs && txs.transactions && txs.transactions.length > 0) {
       renderTransactions(txs.transactions.slice(0, 10));
     } else {
       document.getElementById('transactions-list').innerHTML = 

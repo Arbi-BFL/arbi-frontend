@@ -11,7 +11,7 @@
   /* Neutrals */
   --nb-black: #1A1A1A;
   --nb-white: #FFFFFF;
-  --nb-gray-light: #F8F9FA;
+  --nb-bg: #E8E5F0;  /* Soft purple-gray background */
   --nb-gray-dark: #2C3E50;
   
   /* Borders & Shadows */
@@ -26,7 +26,7 @@
 
 body {
   font-family: 'Inter', -apple-system, sans-serif;
-  background: var(--nb-gray-light);
+  background: var(--nb-bg);
   color: var(--nb-black);
   line-height: 1.6;
 }

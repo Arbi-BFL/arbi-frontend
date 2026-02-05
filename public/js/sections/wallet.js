@@ -7,10 +7,20 @@ export async function renderWallet() {
     <div class="section">
       <h1 class="section-title">💰 Wallet</h1>
       
+      <!-- Total Balance Card -->
+      <div class="card" style="background: var(--nb-green); margin-bottom: 2rem;">
+        <div style="text-align: center;">
+          <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; opacity: 0.9;">Total Balance</div>
+          <div id="total-balance" style="font-size: 4rem; font-weight: 700; font-family: 'Courier New', monospace; color: var(--nb-black);">$0.00</div>
+          <div id="total-breakdown" style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">Loading...</div>
+        </div>
+      </div>
+      
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
         <div class="card" style="background: var(--nb-yellow);">
           <h2 style="margin-bottom: 1rem;">⛓️ Base</h2>
           <div id="base-balance" style="font-size: 3rem; font-weight: 700; font-family: 'Courier New', monospace;">Loading...</div>
+          <div id="base-usd" style="font-size: 1.25rem; font-weight: 600; margin-top: 0.5rem; color: var(--nb-black); opacity: 0.8;">Native Balance: $0.00</div>
           <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(0,0,0,0.1); border: 2px solid var(--nb-black); font-family: monospace; font-size: 0.85rem; word-break: break-all;">
             0x75f39d9Bff76d376F3960028d98F324aAbB6c5e6
           </div>
@@ -19,6 +29,7 @@ export async function renderWallet() {
         <div class="card" style="background: var(--nb-blue);">
           <h2 style="margin-bottom: 1rem;">☀️ Solana</h2>
           <div id="solana-balance" style="font-size: 3rem; font-weight: 700; font-family: 'Courier New', monospace;">Loading...</div>
+          <div id="solana-usd" style="font-size: 1.25rem; font-weight: 600; margin-top: 0.5rem; color: var(--nb-black); opacity: 0.8;">Native Balance: $0.00</div>
           <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(0,0,0,0.1); border: 2px solid var(--nb-black); font-family: monospace; font-size: 0.85rem; word-break: break-all;">
             FeB1jqjCFKyQ2vVTPLgYmZu1yLvBWhsGoudP46fhhF8z
           </div>
@@ -48,20 +59,29 @@ export async function renderWallet() {
 }
 
 let allTokens = [];
+let nativeBalances = { base: 0, solana: 0 };
 
 async function loadWalletData() {
   try {
     const data = await getWalletBalances();
     
-    // Update native balances
+    // Update native balances and USD values
     if (data.base) {
-      document.getElementById('base-balance').textContent = 
-        `${data.base.balance?.toFixed(4) || '0.0000'} ETH`;
+      const ethBalance = data.base.balance?.toFixed(4) || '0.0000';
+      const ethUsd = data.base.usd || 0;
+      nativeBalances.base = ethUsd;
+      
+      document.getElementById('base-balance').textContent = `${ethBalance} ETH`;
+      document.getElementById('base-usd').textContent = `Native Balance: $${ethUsd.toFixed(2)}`;
     }
     
     if (data.solana) {
-      document.getElementById('solana-balance').textContent = 
-        `${data.solana.balance?.toFixed(4) || '0.0000'} SOL`;
+      const solBalance = data.solana.balance?.toFixed(4) || '0.0000';
+      const solUsd = data.solana.usd || 0;
+      nativeBalances.solana = solUsd;
+      
+      document.getElementById('solana-balance').textContent = `${solBalance} SOL`;
+      document.getElementById('solana-usd').textContent = `Native Balance: $${solUsd.toFixed(2)}`;
     }
     
     // Load tokens
@@ -69,23 +89,35 @@ async function loadWalletData() {
     if (tokensData && tokensData.tokens) {
       allTokens = tokensData.tokens;
       renderTokens(allTokens);
+      updateTotalBalance();
     } else {
       document.getElementById('tokens-list').innerHTML = `
         <div style="text-align: center; padding: 2rem; opacity: 0.7;">
           No tokens found
         </div>
       `;
+      updateTotalBalance();
     }
   } catch (error) {
     console.error('Error loading wallet data:', error);
     document.getElementById('base-balance').textContent = 'Error';
     document.getElementById('solana-balance').textContent = 'Error';
+    document.getElementById('total-balance').textContent = 'Error';
     document.getElementById('tokens-list').innerHTML = `
       <div style="text-align: center; padding: 2rem; color: var(--nb-coral);">
         Error loading tokens: ${error.message}
       </div>
     `;
   }
+}
+
+function updateTotalBalance() {
+  const tokenValue = allTokens.reduce((sum, t) => sum + t.value, 0);
+  const total = nativeBalances.base + nativeBalances.solana + tokenValue;
+  
+  document.getElementById('total-balance').textContent = `$${total.toFixed(2)}`;
+  document.getElementById('total-breakdown').textContent = 
+    `Native: $${(nativeBalances.base + nativeBalances.solana).toFixed(2)} • Tokens: $${tokenValue.toFixed(2)}`;
 }
 
 function renderTokens(tokens) {

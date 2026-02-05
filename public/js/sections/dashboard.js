@@ -1,4 +1,4 @@
-import { getWalletBalances, getEmailStats, getAnalyticsStats, getOnchainStats } from '../api.js';
+import { getWalletBalances, getWalletTokens, getEmailStats, getAnalyticsStats, getOnchainStats } from '../api.js';
 
 export async function renderDashboard() {
   const content = document.getElementById('app-content');
@@ -55,7 +55,17 @@ async function loadDashboardWidgets() {
   try {
     const wallet = await getWalletBalances();
     if (wallet.error) throw new Error(wallet.error);
-    const total = parseFloat(wallet.base?.usd || 0) + parseFloat(wallet.solana?.usd || 0);
+    
+    const nativeTotal = parseFloat(wallet.base?.usd || 0) + parseFloat(wallet.solana?.usd || 0);
+    
+    // Fetch tokens to get total balance including tokens
+    const tokensData = await getWalletTokens();
+    let tokenTotal = 0;
+    if (tokensData && tokensData.tokens) {
+      tokenTotal = tokensData.tokens.reduce((sum, t) => sum + t.value, 0);
+    }
+    
+    const total = nativeTotal + tokenTotal;
     document.getElementById('wallet-widget').textContent = `$${total.toFixed(2)}`;
   } catch (e) {
     console.error('Wallet error:', e);

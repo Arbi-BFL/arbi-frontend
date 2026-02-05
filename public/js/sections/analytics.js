@@ -8,19 +8,24 @@ export async function renderAnalytics() {
       <h1 class="section-title">📊 Analytics</h1>
       
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-        <div class="card" style="background: var(--nb-yellow);">
-          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9;">Total Data Points</h3>
-          <div id="analytics-total" style="font-size: 2.5rem; font-weight: 700; font-family: 'Courier New', monospace;">Loading...</div>
+        <div class="card card-yellow">
+          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9;">Snapshots Recorded</h3>
+          <div id="analytics-snapshots" style="font-size: 2.5rem; font-weight: 700; font-family: 'Courier New', monospace;">Loading...</div>
         </div>
         
-        <div class="card" style="background: var(--nb-blue);">
-          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9;">Last Updated</h3>
-          <div id="analytics-updated" style="font-size: 1.25rem; font-weight: 700;">Loading...</div>
+        <div class="card card-cyan">
+          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9;">Tracking Since</h3>
+          <div id="analytics-since" style="font-size: 1.1rem; font-weight: 700;">Loading...</div>
         </div>
         
-        <div class="card" style="background: var(--nb-pink); color: white;">
-          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9;">Status</h3>
-          <div id="analytics-status" style="font-size: 1.5rem; font-weight: 700;">Loading...</div>
+        <div class="card card-purple">
+          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9; color: white;">Base Balance</h3>
+          <div id="analytics-base" style="font-size: 1.5rem; font-weight: 700; color: white;">Loading...</div>
+        </div>
+        
+        <div class="card card-coral">
+          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9; color: white;">Solana Balance</h3>
+          <div id="analytics-solana" style="font-size: 1.5rem; font-weight: 700; color: white;">Loading...</div>
         </div>
       </div>
       
@@ -43,12 +48,23 @@ async function loadAnalyticsData() {
   try {
     const data = await getAnalyticsStats();
     
-    document.getElementById('analytics-total').textContent = data.total_points || '0';
-    document.getElementById('analytics-updated').textContent = data.last_updated || 'Never';
-    document.getElementById('analytics-status').textContent = data.status || 'Unknown';
+    document.getElementById('analytics-snapshots').textContent = data.metrics?.snapshotsRecorded || '0';
+    
+    const since = data.metrics?.trackingSince;
+    if (since) {
+      const date = new Date(since);
+      document.getElementById('analytics-since').textContent = date.toLocaleDateString();
+    } else {
+      document.getElementById('analytics-since').textContent = 'Unknown';
+    }
+    
+    document.getElementById('analytics-base').textContent = `${data.current?.base?.balance || '0'} ETH`;
+    document.getElementById('analytics-solana').textContent = `${data.current?.solana?.balance || '0'} SOL`;
   } catch (error) {
-    document.getElementById('analytics-total').textContent = 'Error';
-    document.getElementById('analytics-updated').textContent = 'Error';
-    document.getElementById('analytics-status').textContent = 'Error';
+    console.error('Analytics error:', error);
+    document.getElementById('analytics-snapshots').textContent = 'Error';
+    document.getElementById('analytics-since').textContent = 'Error';
+    document.getElementById('analytics-base').textContent = 'Error';
+    document.getElementById('analytics-solana').textContent = 'Error';
   }
 }

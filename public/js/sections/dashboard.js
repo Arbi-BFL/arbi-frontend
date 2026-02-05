@@ -17,7 +17,7 @@ export async function renderDashboard() {
         <div class="stat-card card-coral">
           <div class="stat-label">📧 Email System</div>
           <div class="stat-value" id="email-widget">...</div>
-          <div class="stat-label">Monitoring Status</div>
+          <div class="stat-label">Emails Processed</div>
         </div>
         
         <div class="stat-card card-cyan">
@@ -29,7 +29,7 @@ export async function renderDashboard() {
         <div class="stat-card card-purple">
           <div class="stat-label">📊 Analytics</div>
           <div class="stat-value" id="analytics-widget">...</div>
-          <div class="stat-label">Data Points</div>
+          <div class="stat-label">Snapshots Recorded</div>
         </div>
       </div>
       
@@ -55,9 +55,10 @@ async function loadDashboardWidgets() {
   try {
     const wallet = await getWalletBalances();
     if (wallet.error) throw new Error(wallet.error);
-    const total = (wallet.base?.usd || 0) + (wallet.solana?.usd || 0);
+    const total = parseFloat(wallet.base?.usd || 0) + parseFloat(wallet.solana?.usd || 0);
     document.getElementById('wallet-widget').textContent = `$${total.toFixed(2)}`;
   } catch (e) {
+    console.error('Wallet error:', e);
     document.getElementById('wallet-widget').innerHTML = '<span style="font-size: 1rem;">Error</span>';
   }
   
@@ -65,8 +66,10 @@ async function loadDashboardWidgets() {
   try {
     const email = await getEmailStats();
     if (email.error) throw new Error(email.error);
-    document.getElementById('email-widget').textContent = email.status || 'Unknown';
+    const total = email.total_processed || 0;
+    document.getElementById('email-widget').textContent = total.toString();
   } catch (e) {
+    console.error('Email error:', e);
     document.getElementById('email-widget').innerHTML = '<span style="font-size: 1rem;">Error</span>';
   }
   
@@ -76,6 +79,7 @@ async function loadDashboardWidgets() {
     if (onchain.error) throw new Error(onchain.error);
     document.getElementById('onchain-widget').textContent = onchain.total_transactions || '0';
   } catch (e) {
+    console.error('Onchain error:', e);
     document.getElementById('onchain-widget').innerHTML = '<span style="font-size: 1rem;">Error</span>';
   }
   
@@ -83,8 +87,10 @@ async function loadDashboardWidgets() {
   try {
     const analytics = await getAnalyticsStats();
     if (analytics.error) throw new Error(analytics.error);
-    document.getElementById('analytics-widget').textContent = analytics.total_points || '0';
+    const snapshots = analytics.metrics?.snapshotsRecorded || 0;
+    document.getElementById('analytics-widget').textContent = snapshots.toString();
   } catch (e) {
+    console.error('Analytics error:', e);
     document.getElementById('analytics-widget').innerHTML = '<span style="font-size: 1rem;">Error</span>';
   }
 }

@@ -19,13 +19,13 @@ export async function renderAnalytics() {
         </div>
         
         <div class="card card-purple">
-          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9; color: white;">Base Balance</h3>
-          <div id="analytics-base" style="font-size: 1.5rem; font-weight: 700; color: white;">Loading...</div>
+          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9;">Base Balance</h3>
+          <div id="analytics-base" style="font-size: 1.5rem; font-weight: 700;">Loading...</div>
         </div>
         
         <div class="card card-coral">
-          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9; color: white;">Solana Balance</h3>
-          <div id="analytics-solana" style="font-size: 1.5rem; font-weight: 700; color: white;">Loading...</div>
+          <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9;">Solana Balance</h3>
+          <div id="analytics-solana" style="font-size: 1.5rem; font-weight: 700;">Loading...</div>
         </div>
       </div>
       

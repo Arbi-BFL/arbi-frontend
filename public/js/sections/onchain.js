@@ -8,7 +8,7 @@ export async function renderOnchain() {
       <h1 class="section-title">🔗 Onchain Activity</h1>
       
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-        <div class="card" style="background: #0052FF; color: white;">
+        <div class="card" style="background: #0052FF; color: black;">
           <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9;">Base Transactions</h3>
           <div id="base-txs" style="font-size: 2.5rem; font-weight: 700; font-family: 'Courier New', monospace;">Loading...</div>
         </div>
@@ -18,7 +18,7 @@ export async function renderOnchain() {
           <div id="solana-txs" style="font-size: 2.5rem; font-weight: 700; font-family: 'Courier New', monospace;">Loading...</div>
         </div>
         
-        <div class="card" style="background: var(--nb-pink); color: white;">
+        <div class="card" style="background: var(--nb-pink); color: black;">
           <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; opacity: 0.9;">Total Activity</h3>
           <div id="total-txs" style="font-size: 2.5rem; font-weight: 700; font-family: 'Courier New', monospace;">Loading...</div>
         </div>
@@ -64,7 +64,7 @@ function renderTransactions(txs) {
     <div style="padding: 1rem; border-bottom: 3px solid var(--nb-black); display: flex; justify-content: space-between; align-items: center;">
       <div>
         <div style="font-weight: 700; margin-bottom: 0.25rem;">
-          <span style="display: inline-block; padding: 2px 8px; background: ${tx.network === 'base' ? '#0052FF' : '#14F195'}; color: ${tx.network === 'base' ? 'white' : 'black'}; border: 2px solid var(--nb-black); font-size: 0.75rem; margin-right: 0.5rem;">${tx.network.toUpperCase()}</span>
+          <span style="display: inline-block; padding: 2px 8px; background: ${tx.network === 'base' ? '#0052FF' : '#14F195'}; color: black; border: 2px solid var(--nb-black); font-size: 0.75rem; margin-right: 0.5rem;">${tx.network.toUpperCase()}</span>
           ${tx.type || 'Transaction'}
         </div>
         <div style="font-family: monospace; font-size: 0.85rem; opacity: 0.8;">${tx.hash?.slice(0, 16)}...</div>

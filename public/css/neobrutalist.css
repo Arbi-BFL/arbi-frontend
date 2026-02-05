@@ -53,11 +53,11 @@ h1, h2, h3 {
 }
 
 .card-yellow { background: var(--nb-yellow); }
-.card-coral { background: var(--nb-coral); color: var(--nb-white); }
+.card-coral { background: var(--nb-coral); color: var(--nb-black); }
 .card-cyan { background: var(--nb-cyan); }
-.card-purple { background: var(--nb-purple); color: var(--nb-white); }
-.card-green { background: var(--nb-green); color: var(--nb-white); }
-.card-blue { background: var(--nb-blue); color: var(--nb-white); }
+.card-purple { background: var(--nb-purple); color: var(--nb-black); }
+.card-green { background: var(--nb-green); color: var(--nb-black); }
+.card-blue { background: var(--nb-blue); color: var(--nb-black); }
 
 /* Stat Cards */
 .stat-card {
@@ -113,9 +113,9 @@ h1, h2, h3 {
   box-shadow: 2px 2px 0 var(--nb-black);
 }
 
-.btn-coral { background: var(--nb-coral); color: var(--nb-white); }
+.btn-coral { background: var(--nb-coral); color: var(--nb-black); }
 .btn-cyan { background: var(--nb-cyan); }
-.btn-purple { background: var(--nb-purple); color: var(--nb-white); }
+.btn-purple { background: var(--nb-purple); color: var(--nb-black); }
 
 /* Loading States */
 .loading {
@@ -144,7 +144,7 @@ h1, h2, h3 {
   background: var(--nb-coral);
   border: var(--border);
   padding: 1rem;
-  color: var(--nb-white);
+  color: var(--nb-black);
   font-weight: 600;
   box-shadow: var(--shadow-sm);
 }

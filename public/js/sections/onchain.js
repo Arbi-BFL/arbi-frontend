@@ -62,15 +62,37 @@ async function loadOnchainData() {
 }
 
 function renderTransactions(txs) {
+  // Our wallet addresses
+  const BASE_WALLET = '0x75f39d9Bff76d376F3960028d98F324aAbB6c5e6'.toLowerCase();
+  const SOLANA_WALLET = 'FeB1jqjCFKyQ2vVTPLgYmZu1yLvBWhsGoudP46fhhF8z';
+  
   const html = txs.map(tx => {
     const explorerUrl = tx.network === 'base' 
       ? `https://basescan.org/tx/${tx.hash}`
       : `https://explorer.solana.com/tx/${tx.hash}`;
     
     const value = parseFloat(tx.value) || 0;
-    const valueDisplay = tx.network === 'base' 
-      ? `${value.toFixed(6)} ETH` 
-      : `${value.toFixed(6)} SOL`;
+    
+    // Use token_symbol from database, fallback to ETH/SOL
+    const tokenSymbol = tx.token_symbol || (tx.network === 'base' ? 'ETH' : 'SOL');
+    let valueDisplay = `${value.toFixed(6)} ${tokenSymbol}`;
+    
+    // Add USD value if available
+    if (tx.usd_value && parseFloat(tx.usd_value) > 0) {
+      valueDisplay += ` ($${parseFloat(tx.usd_value).toFixed(2)})`;
+    }
+    
+    // Replace our addresses with arbi.base.eth
+    const formatAddress = (addr) => {
+      if (!addr) return '';
+      if (addr.toLowerCase() === BASE_WALLET || addr === SOLANA_WALLET) {
+        return 'arbi.base.eth';
+      }
+      return `${addr.slice(0, 10)}...${addr.slice(-8)}`;
+    };
+    
+    const fromDisplay = formatAddress(tx.from_address);
+    const toDisplay = formatAddress(tx.to_address);
     
     return `
       <div style="padding: 1.25rem; border-bottom: 3px solid var(--nb-black); background: ${tx.network === 'base' ? '#E3F2FD' : '#E8F5E9'};">
@@ -83,10 +105,10 @@ function renderTransactions(txs) {
             </div>
             
             <div style="font-family: monospace; font-size: 0.85rem; margin-bottom: 0.25rem;">
-              <strong>From:</strong> <span style="opacity: 0.8;">${tx.from_address.slice(0, 10)}...${tx.from_address.slice(-8)}</span>
+              <strong>From:</strong> <span style="opacity: 0.8;">${fromDisplay}</span>
             </div>
             <div style="font-family: monospace; font-size: 0.85rem; margin-bottom: 0.25rem;">
-              <strong>To:</strong> <span style="opacity: 0.8;">${tx.to_address.slice(0, 10)}...${tx.to_address.slice(-8)}</span>
+              <strong>To:</strong> <span style="opacity: 0.8;">${toDisplay}</span>
             </div>
             
             <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">
